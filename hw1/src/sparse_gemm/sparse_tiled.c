@@ -29,16 +29,42 @@ int gemm_sparse_tiled(const float *a, const sparse_weights *w, float *c,
             
         }
     }
-
-
-    // for (size_t i = 0; i < m; ++i){
-    //     for (size_t j = 0; j < w->n; ++j){
-    //         printf("%f ", c[i * w->n + j]);
-    //     }
-    //     printf("\n");
-    // }
-
-
-
     return SPARSE_OK;
 }
+// {
+//     for (size_t ii = 0; ii < m; ii += 4) {
+//         for (size_t g = 0; g < w->n / 4; ++g) {
+
+//             float acc[4][4] = {{0.0f}};
+
+//             for (size_t p = w->block_col_ptr[g];
+//                  p < w->block_col_ptr[g + 1];
+//                  ++p) {
+
+//                 size_t k0 = 4 * w->block_row_idx[p];
+//                 const float *block = w->block_values + 16 * p;
+
+//                 for (size_t r = 0; r < 4; ++r) {
+//                     const float *brow = block + 4 * r;
+
+//                     for (size_t t = 0; t < 4; ++t) {
+//                         float av = a[(ii + t) * w->k + k0 + r];
+
+//                         for (size_t col = 0; col < 4; ++col) {
+//                             acc[t][col] += av * brow[col];
+//                         }
+//                     }
+//                 }
+//             }
+
+//             for (size_t t = 0; t < 4; ++t) {
+//                 for (size_t col = 0; col < 4; ++col) {
+//                     c[(ii + t) * w->n + 4 * g + col]
+//                         = acc[t][col];
+//                 }
+//             }
+//         }
+//     }
+
+//     return SPARSE_OK;
+// }
